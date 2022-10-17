@@ -1,0 +1,41 @@
+{
+    "name": "marketforce-info/yii2-sendgrid",
+    "description": "Yii2 Sendgrid Mailer extension",
+    "keywords": ["yii2", "sendgrid", "mailer"],
+    "authors": [
+        {
+            "name": "Wade Shuler",
+            "homepage": "https://github.com/wadeshuler",
+            "email": "wadeshuler@users.noreply.github.com"
+        },
+        {
+            "name": "Market Force Information",
+            "homepage": "https://github.com/marketforce-info"
+        }
+    ],
+    "homepage": "https://github.com/marketforce-info/yii2-sendgrid",
+    "support": {
+        "issues": "https://github.com/marketforce-info/yii2-sendgrid/issues?state=open",
+        "source": "https://github.com/marketforce-info/yii2-sendgrid"
+    },
+    "type": "yii2-extension",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {
+        "php": "^7.4 || ^8",
+        "sendgrid/sendgrid": "^7.0",
+        "yiisoft/yii2": "^2"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "MarketforceInfo\\SendGrid\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
+}
