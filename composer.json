@@ -27,10 +27,18 @@
         "yiisoft/yii2": "^2"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symplify/easy-coding-standard": "^11",
+        "phpunit/phpunit": "^9"
     },
     "autoload": {
         "psr-4": {
             "MarketforceInfo\\SendGrid\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MarketforceInfo\\SendGrid\\Tests\\": "tests/"
         }
     },
     "config": {
