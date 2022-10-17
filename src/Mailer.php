@@ -56,7 +56,7 @@ class Mailer extends BaseMailer
      */
     public function getSendGrid()
     {
-        if ( ! is_object($this->_sendGrid) ) {
+        if (!is_object($this->_sendGrid)) {
             $this->_sendGrid = $this->createSendGrid();
         }
 
@@ -72,10 +72,10 @@ class Mailer extends BaseMailer
     {
         $response = $this->getSendGrid()->client->mail()->batch()->post();
 
-        if ( $response->statusCode() === 201 ) {
-            if ( $decoded = json_decode($response->body()) ) {
+        if ($response->statusCode() === 201) {
+            if ($decoded = json_decode($response->body())) {
                 $batchId = $decoded->batch_id;
-                if ( isset($batchId) && ! empty($batchId) && is_string($batchId) ) {
+                if (isset($batchId) && !empty($batchId) && is_string($batchId)) {
                     return $batchId;
                 }
             }
@@ -92,7 +92,7 @@ class Mailer extends BaseMailer
      */
     public function createSendGrid()
     {
-        if ( ! $this->apiKey ) {
+        if (!$this->apiKey) {
             throw new InvalidConfigException("SendGrid API Key is required!");
         }
 
@@ -158,7 +158,7 @@ class Mailer extends BaseMailer
         try {
             $payload = $message->buildMessage();
 
-            if ( ! $payload ) {
+            if (!$payload) {
                 throw new \Exception('Error building message. Unable to send!');
             }
 
@@ -167,13 +167,13 @@ class Mailer extends BaseMailer
             $formatResponse = ['code' => $response->statusCode(), 'headers' => $response->headers(), 'body' => $response->body()];
             $this->addRawResponse($formatResponse);
 
-            if ( ($response->statusCode() !== 202) && ($response->statusCode() !== 200) ) {
-                throw new \Exception( $this->parseErrorCode($response->statusCode()) );
+            if (($response->statusCode() !== 202) && ($response->statusCode() !== 200)) {
+                throw new \Exception($this->parseErrorCode($response->statusCode()));
             }
 
             return true;
 
-        } catch ( \Exception $e ) {
+        } catch (\Exception $e) {
 
             Yii::error($e->getMessage(), self::LOGNAME);
             $this->addError($e->getMessage());
