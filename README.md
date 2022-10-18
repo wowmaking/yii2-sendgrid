@@ -1,8 +1,8 @@
 # MarketforceInfo/Yii2-SendGrid
 
-[![Code Checks](https://img.shields.io/github/workflow/status/marketforce-info/yii2-sendgrid/code-checks)](https://github.com/marketforce-info/yii2-sendgrid/actions/workflows/code-checks.yml)
-[![Latest Stable Version](https://img.shields.io/github/v/release/marketforce-info/yii2-sendgrid)](https://github.com/marketforce-info/yii2-sendgrid/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/marketforce-info/yii2-sendgrid)](https://packagist.org/packages/marketforce-info/yii2-sendgrid)
+[![Code Checks](https://img.shields.io/github/workflow/status/marketforce-info/yii2-sendgrid/code-checks?logo=github)](https://github.com/marketforce-info/yii2-sendgrid/actions/workflows/code-checks.yml)
+[![Latest Stable Version](https://img.shields.io/github/v/release/marketforce-info/yii2-sendgrid?logo=packagist)](https://github.com/marketforce-info/yii2-sendgrid/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/marketforce-info/yii2-sendgrid?logo=packagist)](https://packagist.org/packages/marketforce-info/yii2-sendgrid)
 ![Licence](https://img.shields.io/github/license/marketforce-info/yii2-sendgrid.svg)
 
 ## Description
@@ -13,13 +13,13 @@ Yii2 Mailer extension for SendGrid with batch mailing support.
 ### Installation
 
 ```bash
-php composer.phar require marketforce-info/yii2-sendgrid
+$ composer require marketforce-info/yii2-sendgrid
 ```
 
 Then configure your `mailer` component in your `main-local.php` (advanced) or `web.php` (basic) like so:
 ```php
     'mailer' => [
-        'class' => 'MarketforceInfo\SendGrid\Mailer',
+        'class' => \MarketforceInfo\SendGrid\Mailer::class,
         'viewPath' => '@common/mail',
         // send all mails to a file by default. You have to set
         // 'useFileTransport' to false and configure a transport
