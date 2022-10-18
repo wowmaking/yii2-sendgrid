@@ -2,6 +2,7 @@
 
 namespace MarketforceInfo\SendGrid;
 
+use SendGrid;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
@@ -9,12 +10,12 @@ use yii\mail\BaseMailer;
 
 class Mailer extends BaseMailer
 {
-    const LOGNAME = 'SendGrid Mailer';
+    public const LOGNAME = 'SendGrid Mailer';
 
     /**
      * @var string the default class name of the new message instances created by [[createMessage()]]
      */
-    public $messageClass = 'wadeshuler\sendgrid\Message';
+    public $messageClass = Message::class;
 
     /**
      * @var string the directory where the email messages are saved when [[useFileTransport]] is true.
@@ -24,27 +25,24 @@ class Mailer extends BaseMailer
     /**
      * @var string the api key for the sendgrid api
      */
-    public $apiKey;
+    public string $apiKey;
 
     /**
      * @var array a list of options for the sendgrid api
      */
-    public $options = [];
+    public array $options = [];
 
-    /**
-     * @var object SendGrid mailer instance
-     */
-    private $_sendGrid;
+    private SendGrid $sendGrid;
 
     /**
      * @var array Raw response data from client
      */
-    private $_rawResponses;
+    private array $rawResponses = [];
 
     /**
      * @var array List of errors from the client
      */
-    private $_errors = [];
+    private array $errors = [];
 
     /**
      * Get SendGrid instance
@@ -52,15 +50,16 @@ class Mailer extends BaseMailer
      * A SendGrid instance is created using `createSendGrid()` if it hasn't
      * already been instantiated.
      *
-     * @return \SendGrid instance
+     * @return SendGrid instance
+     * @throws InvalidConfigException
      */
-    public function getSendGrid()
+    public function getSendGrid(): SendGrid
     {
-        if (!is_object($this->_sendGrid)) {
-            $this->_sendGrid = $this->createSendGrid();
+        if (!isset($this->sendGrid)) {
+            $this->sendGrid = $this->createSendGrid();
         }
 
-        return $this->_sendGrid;
+        return $this->sendGrid;
     }
 
     /**
@@ -70,68 +69,63 @@ class Mailer extends BaseMailer
      */
     public function createBatchId()
     {
-        $response = $this->getSendGrid()->client->mail()->batch()->post();
-
-        if ($response->statusCode() === 201) {
-            if ($decoded = json_decode($response->body())) {
-                $batchId = $decoded->batch_id;
-                if (isset($batchId) && !empty($batchId) && is_string($batchId)) {
-                    return $batchId;
-                }
+        try {
+            $response = $this->getSendGrid()->client->mail()->batch()->post();
+            if ($response->statusCode() !== 201) {
+                return false;
             }
+            $decoded = json_decode($response->body(), false, 512, JSON_THROW_ON_ERROR);
+            $batchId = $decoded->batch_id;
+            return $batchId ?? false;
+        } catch (\Exception $exception) {
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Create SendGrid instance
      *
-     * @return \SendGrid instance
-     * @throws \yii\base\InvalidConfigException
+     * @return SendGrid instance
+     * @throws InvalidConfigException
      */
-    public function createSendGrid()
+    public function createSendGrid(): SendGrid
     {
-        if (!$this->apiKey) {
-            throw new InvalidConfigException("SendGrid API Key is required!");
+        if (!isset($this->apiKey)) {
+            throw new InvalidConfigException('SendGrid API Key is required!');
         }
 
-        return new \SendGrid($this->apiKey, $this->options);
+        return new SendGrid($this->apiKey, $this->options);
     }
 
     /**
      * @return array Get the array of raw JSON responses.
      */
-    public function getRawResponses()
+    public function getRawResponses(): array
     {
-        return $this->_rawResponses;
+        return $this->rawResponses;
     }
 
-    /**
-     * @param string $value JSON string to be encoded and added to the raw responses array
-     */
-    public function addRawResponse($value)
+    public function addRawResponse(array $response): self
     {
-        $this->_rawResponses[] = Json::encode($value);
+        $this->rawResponses[] = Json::encode($response);
+        return $this;
     }
 
     /**
      * @return array Get array of errors
      */
-    public function getErrors()
+    public function getErrors(): array
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
-    /**
-     * @param array $errors Add an error to the errors array
-     */
-    public function addError($error)
+    public function addError(string $message): self
     {
-        $this->_errors[] = $error;
+        $this->errors[] = $message;
+        return $this;
     }
 
-    public function parseErrorCode($code)
+    public function parseErrorCode($code): string
     {
         static $key = [
             200 => 'Your message is valid, but it is not queued to be delivered. (Sandbox)',
@@ -147,24 +141,25 @@ class Mailer extends BaseMailer
             500 => 'An error occurred on a SendGrid server.',
             503 => 'The SendGrid v3 Web API is not available.',
         ];
-        return isset($key[$code]) ? $key[$code] : "$code: An unknown error was encountered!";
+        return $key[$code] ?? "{$code}: An unknown error was encountered!";
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function sendMessage($message)
+
+    public function sendMessage($message): bool
     {
         try {
             $payload = $message->buildMessage();
-
             if (!$payload) {
                 throw new \Exception('Error building message. Unable to send!');
             }
 
             $response = $this->getSendGrid()->client->mail()->send()->post($payload);
 
-            $formatResponse = ['code' => $response->statusCode(), 'headers' => $response->headers(), 'body' => $response->body()];
+            $formatResponse = [
+                'code' => $response->statusCode(),
+                'headers' => $response->headers(),
+                'body' => $response->body(),
+            ];
             $this->addRawResponse($formatResponse);
 
             if (($response->statusCode() !== 202) && ($response->statusCode() !== 200)) {
@@ -172,14 +167,11 @@ class Mailer extends BaseMailer
             }
 
             return true;
-
         } catch (\Exception $e) {
-
             Yii::error($e->getMessage(), self::LOGNAME);
             $this->addError($e->getMessage());
 
             return false;
         }
     }
-
 }
