@@ -9,6 +9,10 @@ use PHPUnit\Framework\TestCase;
 use SendGrid\Client as SendGridClient;
 use SendGrid\Mail\Mail;
 
+/**
+ * @covers \MarketforceInfo\SendGrid\Mailer
+ * @covers \MarketforceInfo\SendGrid\Message
+ */
 class SendTest extends TestCase
 {
     private Mailer $mailer;

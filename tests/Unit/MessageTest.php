@@ -8,6 +8,9 @@ use SendGrid\Mail\Mail;
 use yii\mail\BaseMessage;
 use yii\mail\MessageInterface;
 
+/**
+ * @covers \MarketforceInfo\SendGrid\Message
+ */
 class MessageTest extends TestCase
 {
     public function testImplementsYiiMessage()

@@ -8,6 +8,9 @@ use yii\base\InvalidConfigException;
 use yii\mail\BaseMailer;
 use yii\mail\MailerInterface;
 
+/**
+ * @covers \MarketforceInfo\SendGrid\Mailer
+ */
 class MailerTest extends TestCase
 {
     public function testImplementsYiiMailer()
