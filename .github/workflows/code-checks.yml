@@ -30,6 +30,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
+          extensions: mcrypt
 
       - name: Cache Composer packages
         id: composer-cache

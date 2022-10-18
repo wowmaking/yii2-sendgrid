@@ -23,7 +23,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.4 || ^8",
+        "ext-json": "*",
         "sendgrid/sendgrid": "^7.0",
+        "yidas/yii2-bower-asset": "^2",
         "yiisoft/yii2": "^2"
     },
     "require-dev": {
