@@ -1,5 +1,5 @@
 name: code-checks
-run-name: Build based on master commits
+run-name: Code Checks
 
 on:
   workflow_dispatch:
