@@ -1,5 +1,6 @@
 # MarketforceInfo/Yii2-SendGrid
 
+[![Code Checks](https://img.shields.io/github/workflow/status/marketforce-info/yii2-sendgrid/code-checks)](https://github.com/marketforce-info/yii2-sendgrid/actions/workflows/code-checks.yml)
 [![Latest Stable Version](https://img.shields.io/github/v/release/marketforce-info/yii2-sendgrid)](https://github.com/marketforce-info/yii2-sendgrid/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/marketforce-info/yii2-sendgrid)](https://packagist.org/packages/marketforce-info/yii2-sendgrid)
 ![Licence](https://img.shields.io/github/license/marketforce-info/yii2-sendgrid.svg)
