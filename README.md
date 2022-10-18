@@ -1,5 +1,9 @@
 # MarketforceInfo/Yii2-SendGrid
 
+[![Latest Stable Version](https://img.shields.io/github/v/release/marketforce-info/yii2-sendgrid)](https://github.com/marketforce-info/yii2-sendgrid/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/marketforce-info/yii2-sendgrid)](https://packagist.org/packages/marketforce-info/yii2-sendgrid)
+![Licence](https://img.shields.io/github/license/marketforce-info/yii2-sendgrid.svg)
+
 ## Description
 Yii2 Mailer extension for SendGrid with batch mailing support.
 
