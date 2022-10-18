@@ -144,7 +144,6 @@ class Mailer extends BaseMailer
         return $key[$code] ?? "{$code}: An unknown error was encountered!";
     }
 
-
     public function sendMessage($message): bool
     {
         try {

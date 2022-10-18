@@ -10,7 +10,6 @@ class Message extends BaseMessage
 {
     public const LOGNAME = 'SendGrid Mailer';
 
-
     public $mailer;
 
     /**
@@ -249,12 +248,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getTo()
     {
         return $this->to;
     }
-
 
     public function setTo($to): self
     {
@@ -262,12 +259,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getSubject()
     {
         return $this->subject;
     }
-
 
     public function setSubject($subject): self
     {
@@ -275,13 +270,11 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function setHtmlBody($html): self
     {
         $this->htmlBody = $html;
         return $this;
     }
-
 
     public function setTextBody($text): self
     {
@@ -289,12 +282,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getCharset(): ?string
     {
         return $this->charset;
     }
-
 
     public function setCharset($charset): self
     {
@@ -302,12 +293,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getFrom()
     {
         return $this->from;
     }
-
 
     public function setFrom($from): self
     {
@@ -315,12 +304,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getReplyTo()
     {
         return $this->replyTo;
     }
-
 
     public function setReplyTo($replyTo): self
     {
@@ -328,12 +315,10 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getBcc()
     {
         return $this->bcc;
     }
-
 
     public function setBcc($bcc): self
     {
@@ -341,19 +326,16 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function getCc()
     {
         return $this->cc;
     }
-
 
     public function setCc($cc): self
     {
         $this->cc = $cc;
         return $this;
     }
-
 
     public function attach($fileName, array $options = []): self
     {
@@ -364,13 +346,11 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function attachContent($content, array $options = []): self
     {
         Yii::warning('attachContent is not implemented', self::LOGNAME);
         return $this;
     }
-
 
     public function embed($fileName, array $options = []): self
     {
@@ -378,13 +358,11 @@ class Message extends BaseMessage
         return $this;
     }
 
-
     public function embedContent($content, array $options = []): self
     {
         Yii::warning('embedContent is not implemented', self::LOGNAME);
         return $this;
     }
-
 
     public function toString()
     {
