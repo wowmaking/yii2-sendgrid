@@ -4,13 +4,13 @@
     "keywords": ["yii2", "sendgrid", "mailer"],
     "authors": [
         {
+            "name": "Market Force Information",
+            "homepage": "https://github.com/marketforce-info"
+        },
+        {
             "name": "Wade Shuler",
             "homepage": "https://github.com/wadeshuler",
             "email": "wadeshuler@users.noreply.github.com"
-        },
-        {
-            "name": "Market Force Information",
-            "homepage": "https://github.com/marketforce-info"
         }
     ],
     "homepage": "https://github.com/marketforce-info/yii2-sendgrid",
