@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  php:
+    build:
+        dockerfile: ./.docker/Dockerfile
+        context: .
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/php/z-xdebug.ini:/usr/local/etc/php/conf.d/z-xdebug.ini
+      - ./.docker/php/z-errors.ini:/usr/local/etc/php/conf.d/z-errors.ini
