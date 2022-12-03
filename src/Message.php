@@ -175,7 +175,11 @@ class Message extends BaseMessage
 
     public function createSendGridMail(): Mail\Mail
     {
-        return new Mail\Mail();
+        $mail = new Mail\Mail();
+        $mail->setMailSettings(new Mail\MailSettings());
+        $mail->setTrackingSettings(new Mail\TrackingSettings());
+        $mail->setAsm(new Mail\Asm());
+        return $mail;
     }
 
     public function addPersonalization($personalization): self
@@ -379,6 +383,21 @@ class Message extends BaseMessage
     public function getErrors(): array
     {
         return $this->mailer->getErrors();
+    }
+
+    public function getMailSettings(): Mail\MailSettings
+    {
+        return $this->getSendGridMail()->getMailSettings();
+    }
+
+    public function getTrackingSettings(): Mail\TrackingSettings
+    {
+        return $this->getSendGridMail()->getTrackingSettings();
+    }
+
+    public function getAsm(): Mail\Asm
+    {
+        return $this->getSendGridMail()->getAsm();
     }
 
     public function buildMessage(): ?Mail\Mail
@@ -606,14 +625,9 @@ class Message extends BaseMessage
                 $this->getSendGridMail()->setBatchID($this->batchId);
             }
 
-            // @todo asm
-
             if (isset($this->ipPoolName) && !empty($this->ipPoolName)) {
                 $this->getSendGridMail()->setIpPoolName($this->ipPoolName);
             }
-
-            // @todo mail_settings
-            // @todo tracking_settings
 
             return $this->getSendGridMail();
         }

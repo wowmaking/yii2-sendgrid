@@ -124,4 +124,40 @@ class MessageTest extends TestCase
         self::assertEquals('from@example.com', $mail->getFrom()->getEmail());
         self::assertEquals('Some message', $mail->getContents()[0]->getValue());
     }
+
+    public function testCanAlterMailSettings()
+    {
+        $message = new Message();
+        $message->getMailSettings()->enableSandboxMode();
+
+        self::assertSame($message->getSendGridMail()->getMailSettings(), $message->getMailSettings());
+        self::assertTrue($message->getSendGridMail()->getMailSettings()->getSandboxMode()->getEnable());
+    }
+
+    public function testCanAlterTrackingSettings()
+    {
+        $message = new Message();
+        $message->getTrackingSettings()->setClickTracking(true);
+
+        self::assertSame($message->getSendGridMail()->getTrackingSettings(), $message->getTrackingSettings());
+        self::assertTrue($message->getSendGridMail()->getTrackingSettings()->getClickTracking()->getEnable());
+    }
+
+    public function testCanAlterAsmSettings()
+    {
+        $groupId = 123;
+        $groupsToDisplay = [123, 456, 789];
+
+        $message = new Message();
+        $message->getAsm()->setGroupId($groupId);
+        $message->getAsm()->setGroupsToDisplay($groupsToDisplay);
+
+        self::assertSame($message->getSendGridMail()->getAsm(), $message->getAsm());
+        // sendgrid sdk is weird
+        self::assertEquals($groupId, $message->getSendGridMail()->getAsm()->getGroupId()->getGroupId());
+        self::assertEquals(
+            $groupsToDisplay,
+            $message->getSendGridMail()->getAsm()->getGroupsToDisplay()->getGroupsToDisplay()
+        );
+    }
 }
