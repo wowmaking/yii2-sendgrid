@@ -25,7 +25,17 @@ class SendTest extends TestCase
         $this->mailer = new Mailer();
         $this->mailer->apiKey = 'ABC123';
         $this->mailer->getSendGrid()->client = $this->client;
+    }
 
+    public function testMissingApiKey()
+    {
+        $message = $this->createMock(Message::class);
+        $message->method('buildMessage')->willReturn(new Mail());
+
+        $mailer = new Mailer();
+        $mailer->send($message);
+
+        self::assertStringContainsString('API Key', current($mailer->getErrors()));
     }
 
     public function testInvalidMessageBuild()
@@ -63,5 +73,43 @@ class SendTest extends TestCase
 
         $errors = $this->mailer->getErrors();
         self::assertEmpty($errors);
+    }
+
+    public function testMailSettingsApplied()
+    {
+        $mail = (new Message())->getSendGridMail();
+        $mail->getMailSettings()->enableSandboxMode();
+        $this->client->addSuccessfulResponse();
+
+        self::assertTrue($this->mailer->send($this->message($mail)));
+
+        $requests = $this->client->getRequestHistory();
+        self::assertCount(1, $requests);
+        self::assertStringContainsString('mail/send', $requests[0]['url']);
+        self::assertStringContainsString('"mail_settings":{"sandbox_mode":{"enable":true}}', $requests[0]['body']);
+    }
+
+    public function testTrackingSettingsApplied()
+    {
+        $mail = (new Message())->getSendGridMail();
+        $mail->getTrackingSettings()->setClickTracking(true);
+        $this->client->addSuccessfulResponse();
+
+        self::assertTrue($this->mailer->send($this->message($mail)));
+
+        $requests = $this->client->getRequestHistory();
+        self::assertCount(1, $requests);
+        self::assertStringContainsString('mail/send', $requests[0]['url']);
+        self::assertStringContainsString('"tracking_settings":{"click_tracking":{"enable":true}}', $requests[0]['body']);
+    }
+
+    /**
+     * Bypasses the normal validation to allow shorter tests
+     */
+    private function message(Mail $mail): Message
+    {
+        $message = $this->createStub(Message::class);
+        $message->method('buildMessage')->willReturn($mail);
+        return $message;
     }
 }
