@@ -4,9 +4,8 @@ namespace MarketforceInfo\SendGrid\Tests\Integration;
 
 use MarketforceInfo\SendGrid\Mailer;
 use MarketforceInfo\SendGrid\Message;
-use MarketforceInfo\SendGrid\Tests\ResponseHandler;
+use MarketforceInfo\SendGrid\Tests\MockClient;
 use PHPUnit\Framework\TestCase;
-use SendGrid\Client as SendGridClient;
 use SendGrid\Mail\Mail;
 
 /**
@@ -16,19 +15,17 @@ use SendGrid\Mail\Mail;
 class SendTest extends TestCase
 {
     private Mailer $mailer;
-
-    private ResponseHandler $responseHandler;
+    private MockClient $client;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->client = new MockClient();
         $this->mailer = new Mailer();
         $this->mailer->apiKey = 'ABC123';
+        $this->mailer->getSendGrid()->client = $this->client;
 
-        $client = $this->createStub(SendGridClient::class);
-        $this->mailer->getSendGrid()->client = $client;
-        $this->responseHandler = new ResponseHandler($client);
     }
 
     public function testInvalidMessageBuild()
@@ -47,7 +44,7 @@ class SendTest extends TestCase
     {
         $message = $this->createStub(Message::class);
         $message->method('buildMessage')->willReturn(new Mail());
-        $this->responseHandler->respondWith(500, 'Internal Error');
+        $this->client->addResponse(500, 'Internal Error');
 
         self::assertFalse($this->mailer->send($message));
 
@@ -60,7 +57,7 @@ class SendTest extends TestCase
     {
         $message = $this->createStub(Message::class);
         $message->method('buildMessage')->willReturn(new Mail());
-        $this->responseHandler->respondWith(202, '');
+        $this->client->addSuccessfulResponse();
 
         self::assertTrue($this->mailer->send($message));
 
