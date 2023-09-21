@@ -8,6 +8,13 @@
 ## Description
 Yii2 Mailer extension for SendGrid with batch mailing support.
 
+### Recommended alternative
+
+A possible alternative to this component is the following combination
+- [Yii2 Symfony Mailer](https://github.com/yiisoft/yii2-symfonymailer)
+- [Symfony Mailer](https://symfony.com/doc/current/mailer.html)
+- [SendGrid Bridge](https://github.com/symfony/symfony/blob/6.3/src/Symfony/Component/Mailer/Bridge/Sendgrid/README.md)
+
 ---
 
 ### Installation
