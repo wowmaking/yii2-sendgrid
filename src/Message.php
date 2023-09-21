@@ -424,26 +424,12 @@ class Message extends BaseMessage
 
                     $personalization = new Mail\Personalization();
 
-                    if (is_array($envelope['to'])) {
-                        foreach ($envelope['to'] as $key => $val) {
-                            if (is_int($key)) {
-                                // `[0 => email]`
-                                $personalization->addTo(new Mail\To(null, $val));
-                            } else {
-                                // `[email => name]`
-                                $personalization->addTo(new Mail\To($key, $val));
-                            }
-                        }
-                    } else {
-                        $personalization->addTo(new Mail\To($envelope['to']));
-                    }
-
+                    $this->applyEmailAddresses($personalization, 'to', $envelope['to']);
                     if (isset($envelope['cc'])) {
-                        $personalization->addCc(new Mail\Cc($envelope['cc']));
+                        $this->applyEmailAddresses($personalization, 'cc', $envelope['cc']);
                     }
-
                     if (isset($envelope['bcc'])) {
-                        $personalization->addBcc(new Mail\Cc($envelope['bcc']));
+                        $this->applyEmailAddresses($personalization, 'bcc', $envelope['bcc']);
                     }
 
                     if (isset($envelope['subject'])) {
@@ -476,28 +462,14 @@ class Message extends BaseMessage
                 }
             } else {
                 // Single Send Mode
-                $personalization = new Mail\Personalization();
+                $personalization = $this->sendGridMail->getPersonalization();
 
-                if (is_array($this->to)) {
-                    foreach ($this->to as $key => $val) {
-                        if (is_int($key)) {
-                            // `[0 => email]`
-                            $personalization->addTo(new Mail\To($val));
-                        } else {
-                            // `[email => name]`
-                            $personalization->addTo(new Mail\To($key, $val));
-                        }
-                    }
-                } else {
-                    $personalization->addTo(new Mail\To($this->to));
-                }
-
-                if (isset($this->bcc)) {
-                    $personalization->addBcc(new Mail\Bcc($this->bcc));
-                }
-
+                $this->applyEmailAddresses($personalization, 'to', $this->to);
                 if (isset($this->cc)) {
-                    $personalization->addCc(new Mail\Cc($this->cc));
+                    $this->applyEmailAddresses($personalization, 'cc', $this->cc);
+                }
+                if (isset($this->bcc)) {
+                    $this->applyEmailAddresses($personalization, 'bcc', $this->bcc);
                 }
 
                 if (isset($this->substitutions) && is_array($this->substitutions)) {
@@ -633,5 +605,23 @@ class Message extends BaseMessage
         }
         Yii::error('From, subject, and message text or html are required for mailing!', self::LOGNAME);
         return null;
+    }
+
+    private function applyEmailAddresses(Mail\Personalization $personalization, string $headerType, $emailAddresses): void
+    {
+        if (!is_array($emailAddresses)) {
+            $emailAddresses = [$emailAddresses];
+        }
+
+        $method = 'add' . ucfirst($headerType);
+        foreach ($emailAddresses as $key => $val) {
+            if (is_int($key)) {
+                // `[0 => email]`
+                $personalization->{$method}(new Mail\To($val));
+            } else {
+                // `[email => name]`
+                $personalization->{$method}(new Mail\To($key, $val));
+            }
+        }
     }
 }
