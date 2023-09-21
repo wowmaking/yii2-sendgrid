@@ -93,7 +93,51 @@ class MessageTest extends TestCase
             'reply' => ['replyTo', 'reply@example.com'],
             'cc' => ['cc', 'cc-user@example.com'],
             'bcc' => ['bcc', 'bcc-user@example.com'],
+            'cc_multiple' => ['cc', ['cc-user1@example.com', 'cc-user2@example.com']],
+            'bcc_multiple' => ['bcc', ['bcc-user1@example.com', 'bcc-user2@example.com']],
         ];
+    }
+
+    public function testSettingArrayOfCcs()
+    {
+        $message = (new Message())
+            ->setSubject('Foo Bar')
+            ->setTo('user@example.com')
+            ->setFrom('from@example.com')
+            ->setTextBody('Some message')
+            ->setCc(['cc1@example.com', 'cc2@example.com']);
+        $sendGridMail = $message->buildMessage();
+        self::assertCount(2, $sendGridMail->getPersonalization()->getCcs());
+        self::assertEquals('cc1@example.com', $sendGridMail->getPersonalization()->getCcs()[0]->getEmail());
+        self::assertEquals('cc2@example.com', $sendGridMail->getPersonalization()->getCcs()[1]->getEmail());
+    }
+
+    public function testSettingArrayOfBccs()
+    {
+        $message = (new Message())
+            ->setSubject('Foo Bar')
+            ->setTo('user@example.com')
+            ->setFrom('from@example.com')
+            ->setTextBody('Some message')
+            ->setBcc(['bcc1@example.com', 'bcc2@example.com']);
+        $sendGridMail = $message->buildMessage();
+        self::assertCount(2, $sendGridMail->getPersonalization()->getBccs());
+        self::assertEquals('bcc1@example.com', $sendGridMail->getPersonalization()->getBccs()[0]->getEmail());
+        self::assertEquals('bcc2@example.com', $sendGridMail->getPersonalization()->getBccs()[1]->getEmail());
+    }
+
+    public function testValuesAreSetOnSendmailObject()
+    {
+        $message = (new Message())
+            ->setSubject('Foo Bar')
+            ->setTo('user@example.com')
+            ->setFrom('from@example.com')
+            ->setTextBody('Some message');
+        $sendGridMail = $message->buildMessage();
+        self::assertEquals('Foo Bar', $sendGridMail->getGlobalSubject()->getSubject());
+        self::assertStringContainsString('user@example.com', $sendGridMail->getPersonalization()->getTos()[0]->getEmail());
+        self::assertStringContainsString('from@example.com', $sendGridMail->getFrom()->getEmail());
+        self::assertStringContainsString('Some message', $sendGridMail->getContents()[0]->getValue());
     }
 
     public function testToString()
