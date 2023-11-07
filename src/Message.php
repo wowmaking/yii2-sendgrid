@@ -462,7 +462,7 @@ class Message extends BaseMessage
                 }
             } else {
                 // Single Send Mode
-                $personalization = $this->sendGridMail->getPersonalization();
+                $personalization = $this->sendGridMail->getPersonalization(0);
 
                 $this->applyEmailAddresses($personalization, 'to', $this->to);
                 if (isset($this->cc)) {
@@ -477,8 +477,6 @@ class Message extends BaseMessage
                         $personalization->addSubstitution((string)$key, (string)$val);
                     }
                 }
-
-                $this->getSendGridMail()->addPersonalization($personalization);
             }
 
             if (is_array($this->from)) {
@@ -499,7 +497,7 @@ class Message extends BaseMessage
             if (is_string($this->replyTo)) {
                 $this->getSendGridMail()->setReplyTo(new Mail\ReplyTo($this->replyTo));
             } else {
-                Yii::warning('ReplyTo must be a string and was ignored!');
+                //Yii::warning('ReplyTo must be a string and was ignored!');
             }
 
             $this->getSendGridMail()->setGlobalSubject($this->subject);
