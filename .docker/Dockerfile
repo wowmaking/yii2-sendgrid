@@ -1,4 +1,4 @@
-FROM php:7.4-cli
+FROM php:8.1-cli
 
 RUN apt-get update -yq && \
     apt-get install -yq  software-properties-common curl ca-certificates \
