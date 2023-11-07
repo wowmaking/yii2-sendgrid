@@ -496,9 +496,8 @@ class Message extends BaseMessage
             // @issue https://github.com/sendgrid/sendgrid-php/issues/390
             if (is_string($this->replyTo)) {
                 $this->getSendGridMail()->setReplyTo(new Mail\ReplyTo($this->replyTo));
-            } else {
-                //Yii::warning('ReplyTo must be a string and was ignored!');
             }
+            //Yii::warning('ReplyTo must be a string and was ignored!');
 
             $this->getSendGridMail()->setGlobalSubject($this->subject);
 
