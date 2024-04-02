@@ -1,5 +1,5 @@
 {
-    "name": "marketforce-info/yii2-sendgrid",
+    "name": "wowmaking/yii2-sendgrid",
     "description": "Yii2 Sendgrid Mailer extension",
     "keywords": ["yii2", "sendgrid", "mailer"],
     "authors": [
