@@ -10,7 +10,7 @@ use yii\mail\BaseMailer;
 
 class Mailer extends BaseMailer
 {
-    public const LOGNAME = 'SendGrid Mailer';
+    const LOGNAME = 'SendGrid Mailer';
 
     /**
      * @var string the default class name of the new message instances created by [[createMessage()]]
@@ -25,24 +25,24 @@ class Mailer extends BaseMailer
     /**
      * @var string the api key for the sendgrid api
      */
-    public string $apiKey;
+    public $apiKey;
 
     /**
      * @var array a list of options for the sendgrid api
      */
-    public array $options = [];
+    public $options = [];
 
-    private SendGrid $sendGrid;
+    private $sendGrid;
 
     /**
      * @var array Raw response data from client
      */
-    private array $rawResponses = [];
+    private $rawResponses = [];
 
     /**
      * @var array List of errors from the client
      */
-    private array $errors = [];
+    private $errors = [];
 
     /**
      * Get SendGrid instance
