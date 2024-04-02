@@ -8,7 +8,7 @@ use yii\mail\BaseMessage;
 
 class Message extends BaseMessage
 {
-    public const LOGNAME = 'SendGrid Mailer';
+    const LOGNAME = 'SendGrid Mailer';
 
     public $mailer;
 
@@ -105,7 +105,7 @@ class Message extends BaseMessage
      *     '%section2%' => 'Substitution Text for Section 2',
      * ]
      */
-    public ?array $sections;
+    public $sections;
 
     /**
      * Array of headers to add to the email.
@@ -116,14 +116,14 @@ class Message extends BaseMessage
      *     'X-track-SentById' => $user->id,
      * ]
      */
-    public ?array $headers;
+    public $headers;
 
     /**
      * Array of SendGrid categories. Max 10 categories per message and 255 chars each.
      *
      * Example: ['May', '2017', 'monthly', 'reports']
      */
-    public ?array $categories;
+    public $categories;
 
     /**
      * Array of custom arguments.
